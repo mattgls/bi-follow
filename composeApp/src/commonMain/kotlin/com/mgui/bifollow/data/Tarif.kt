@@ -1,4 +1,4 @@
-package com.mgui.bifollow
+package com.mgui.bifollow.data
 
 data class JobItem(
     val name: String,
@@ -61,5 +61,5 @@ object TariffDataSource {
         JobItem("Attente (15 min)", 4.00, "AUTRE", "Service Pionniers")
     )
     
-    val alljobs = noveaJobs + pionniersJobs
+//    val alljobs = noveaJobs + pionniersJobs
 }

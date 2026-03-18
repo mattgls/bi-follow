@@ -1,4 +1,4 @@
-package com.mgui.bifollow
+package com.mgui.bifollow.commons
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import com.mgui.bifollow.ui.AddScreen
+import com.mgui.bifollow.ui.DayScreen
+import com.mgui.bifollow.ui.OverviewScreen
 
 enum class Screen(val label: String, val icon: ImageVector) {
     Add("Add", Icons.Default.Add),

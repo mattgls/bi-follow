@@ -1,4 +1,4 @@
-package com.mgui.bifollow
+package com.mgui.bifollow.commons
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*

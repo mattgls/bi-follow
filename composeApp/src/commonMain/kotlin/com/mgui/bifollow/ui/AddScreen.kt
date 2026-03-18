@@ -1,4 +1,4 @@
-package com.mgui.bifollow
+package com.mgui.bifollow.ui
 
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -50,6 +50,9 @@ import bifollow.composeapp.generated.resources.client
 import bifollow.composeapp.generated.resources.date_placeholder
 import bifollow.composeapp.generated.resources.ok
 import bifollow.composeapp.generated.resources.select_date
+import com.mgui.bifollow.commons.BiFollowTheme
+import com.mgui.bifollow.data.JobItem
+import com.mgui.bifollow.data.TariffDataSource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
