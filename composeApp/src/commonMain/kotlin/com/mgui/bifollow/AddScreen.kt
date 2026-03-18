@@ -1,22 +1,17 @@
 package com.mgui.bifollow
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -28,119 +23,50 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.autofill.ContentDataType.Companion.Date
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
+import bifollow.composeapp.generated.resources.Res
+import bifollow.composeapp.generated.resources.cancel
+import bifollow.composeapp.generated.resources.calendar_desc
+import bifollow.composeapp.generated.resources.date_placeholder
+import bifollow.composeapp.generated.resources.ok
+import bifollow.composeapp.generated.resources.select_date
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun AddScreen() {
-    DatePickerDocked()
-}
-
-@Composable
-fun DatePickerModal(
-    onDateSelected: (Long?) -> Unit,
-    onDismiss: () -> Unit
-) {
-
-    val datePickerState = rememberDatePickerState()
-
-    DatePickerDialog(
-        onDismissRequest = onDismiss,
-        confirmButton = {
-            TextButton(onClick = {
-                onDateSelected(datePickerState.selectedDateMillis)
-                onDismiss()
-            }) {
-                Text("OK")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel")
-            }
-        }
-    ) {
-        DatePicker(state = datePickerState)
-    }
-}
-
-@Composable
-fun DatePickerDocked() {
-    var showDatePicker by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState()
-    val selectedDate = datePickerState.selectedDateMillis?.let {
-        convertMillisToDate(it)
-    } ?: ""
-
     Box(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.TopCenter
     ) {
-        OutlinedTextField(
-            value = selectedDate,
-            onValueChange = { },
-            label = { Text("DOB") },
-            readOnly = true,
-            trailingIcon = {
-                IconButton(onClick = { showDatePicker = !showDatePicker }) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = "Select date"
-                    )
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(64.dp)
-        )
-
-        if (showDatePicker) {
-            Popup(
-                onDismissRequest = { showDatePicker = false },
-                alignment = Alignment.TopStart
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .offset(y = 64.dp)
-                        .shadow(elevation = 4.dp)
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(16.dp)
-                ) {
-                    DatePicker(
-                        state = datePickerState,
-                        showModeToggle = false
-                    )
-                }
-            }
-        }
+        DatePickerFieldToModal()
     }
 }
 
 @Composable
 fun DatePickerFieldToModal(modifier: Modifier = Modifier) {
-    var selectedDate by remember { mutableStateOf<Long?>(null) }
+    var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
     var showModal by remember { mutableStateOf(false) }
 
+    // On affiche la date formatée ou un texte vide
+    val dateText = selectedDateMillis?.let { convertMillisToDate(it) } ?: ""
+
     OutlinedTextField(
-        value = selectedDate?.let { convertMillisToDate(it) } ?: "",
+        value = dateText,
         onValueChange = { },
-        label = { Text("DOB") },
-        placeholder = { Text("MM/DD/YYYY") },
+        label = { Text(stringResource(Res.string.select_date)) },
+        placeholder = { Text(stringResource(Res.string.date_placeholder)) },
         trailingIcon = {
-            Icon(Icons.Default.DateRange, contentDescription = "Select date")
+            Icon(Icons.Default.DateRange, contentDescription = stringResource(Res.string.calendar_desc))
         },
+        readOnly = true, // Empêche l'ouverture du clavier
         modifier = modifier
             .fillMaxWidth()
-            .pointerInput(selectedDate) {
+            .pointerInput(Unit) {
                 awaitEachGesture {
-                    // Modifier.clickable doesn't work for text fields, so we use Modifier.pointerInput
-                    // in the Initial pass to observe events before the text field consumes them
-                    // in the Main pass.
                     awaitFirstDown(pass = PointerEventPass.Initial)
                     val upEvent = waitForUpOrCancellation(pass = PointerEventPass.Initial)
                     if (upEvent != null) {
@@ -152,13 +78,38 @@ fun DatePickerFieldToModal(modifier: Modifier = Modifier) {
 
     if (showModal) {
         DatePickerModal(
-            onDateSelected = { selectedDate = it },
+            onDateSelected = { selectedDateMillis = it },
             onDismiss = { showModal = false }
         )
     }
 }
 
-expect fun convertMillisToDate(millis: Long): String /*{
-    val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-    return formatter.format(Date(millis))
-}*/
+@Composable
+fun DatePickerModal(
+    onDateSelected: (Long?) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val datePickerState = rememberDatePickerState()
+
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(onClick = {
+                onDateSelected(datePickerState.selectedDateMillis)
+                onDismiss()
+            }) {
+                Text(stringResource(Res.string.ok))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(Res.string.cancel))
+            }
+        }
+    ) {
+        DatePicker(state = datePickerState)
+    }
+}
+
+// TODO Fonction à implémenter dans androidMain avec SimpleDateFormat
+expect fun convertMillisToDate(millis: Long): String

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">BiFollow</string>
+    <string name="add_screen_title">Ajouter</string>
+    <string name="day_screen_title">Jour</string>
+    <string name="overview_screen_title">Vue d\'ensemble</string>
+    <string name="select_date">Sélectionner une date</string>
+    <string name="date_placeholder">JJ/MM/AAAA</string>
+    <string name="calendar_desc">Calendrier</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Annuler</string>
+</resources>
