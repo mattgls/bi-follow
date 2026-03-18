@@ -50,6 +50,8 @@ import bifollow.composeapp.generated.resources.client
 import bifollow.composeapp.generated.resources.date_placeholder
 import bifollow.composeapp.generated.resources.ok
 import bifollow.composeapp.generated.resources.select_date
+import com.mgui.bifollow.convertMillisToDate
+import com.mgui.bifollow.getCurrentMillis
 import com.mgui.bifollow.commons.BiFollowTheme
 import com.mgui.bifollow.data.JobItem
 import com.mgui.bifollow.data.TariffDataSource
@@ -312,7 +314,3 @@ fun DatePickerModal(
         DatePicker(state = datePickerState)
     }
 }
-
-expect fun convertMillisToDate(millis: Long): String
-
-expect fun getCurrentMillis(): Long

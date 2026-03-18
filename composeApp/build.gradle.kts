@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.gmsGoogleServices)
 }
 
 kotlin {
@@ -52,6 +53,8 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.firebase.analytics)
+            implementation(project.dependencies.platform(libs.firebase.bom))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
