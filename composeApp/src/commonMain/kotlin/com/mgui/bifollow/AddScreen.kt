@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenuItem
@@ -28,7 +29,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -66,7 +66,7 @@ fun AddScreenPreview() {
 fun AddScreen() {
     val noveaJobs = TariffDataSource.noveaJobs
     val pionniersJobs = TariffDataSource.pionniersJobs
-
+    
     var expanded by remember { mutableStateOf(false) }
     var selectedJob by remember { mutableStateOf<JobItem?>(null) }
 
@@ -99,10 +99,7 @@ fun AddScreen() {
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                 colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                 modifier = Modifier
-                    .menuAnchor(
-                        type = ExposedDropdownMenuAnchorType.PrimaryNotEditable,
-                        enabled = true
-                    )
+                    .menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = true)
                     .fillMaxWidth()
             )
 
@@ -147,13 +144,13 @@ fun AddScreen() {
         )
 
         Spacer(modifier = Modifier.weight(1f))
+
         Button(
             onClick = { /* TODO Add the job to the selected date */ },
             modifier = Modifier.fillMaxWidth(),
             enabled = selectedJob != null
         ) {
-            val buttonText =
-                if (selectedJob != null) "Ajouter (${selectedJob!!.price}€)" else "Ajouter"
+            val buttonText = if (selectedJob != null) "Ajouter (${selectedJob!!.price}€)" else "Ajouter"
             Text(buttonText)
         }
     }
@@ -212,8 +209,43 @@ private fun JobDropdownItem(job: JobItem, onClick: () -> Unit) {
 }
 
 @Composable
+fun TariffCard(tariff: JobItem) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = { /* Action au clic sur un tarif */ }
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = tariff.name,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "${tariff.service} • ${tariff.category}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            }
+            Text(
+                text = "${tariff.price} €",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
+@Composable
 fun DatePickerFieldToModal(modifier: Modifier = Modifier) {
-    var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
+    var selectedDateMillis by remember { mutableStateOf<Long?>(getCurrentMillis()) }
     var showModal by remember { mutableStateOf(false) }
 
     val dateText = selectedDateMillis?.let { convertMillisToDate(it) } ?: ""
@@ -224,10 +256,7 @@ fun DatePickerFieldToModal(modifier: Modifier = Modifier) {
         label = { Text(stringResource(Res.string.select_date)) },
         placeholder = { Text(stringResource(Res.string.date_placeholder)) },
         trailingIcon = {
-            Icon(
-                Icons.Default.DateRange,
-                contentDescription = stringResource(Res.string.calendar_desc)
-            )
+            Icon(Icons.Default.DateRange, contentDescription = stringResource(Res.string.calendar_desc))
         },
         readOnly = true,
         modifier = modifier
@@ -245,6 +274,7 @@ fun DatePickerFieldToModal(modifier: Modifier = Modifier) {
 
     if (showModal) {
         DatePickerModal(
+            initialSelectedDateMillis = selectedDateMillis,
             onDateSelected = { selectedDateMillis = it },
             onDismiss = { showModal = false }
         )
@@ -254,10 +284,11 @@ fun DatePickerFieldToModal(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerModal(
+    initialSelectedDateMillis: Long? = null,
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val datePickerState = rememberDatePickerState()
+    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = initialSelectedDateMillis)
 
     DatePickerDialog(
         onDismissRequest = onDismiss,
@@ -280,3 +311,5 @@ fun DatePickerModal(
 }
 
 expect fun convertMillisToDate(millis: Long): String
+
+expect fun getCurrentMillis(): Long
