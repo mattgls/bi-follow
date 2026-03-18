@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
@@ -27,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import bifollow.composeapp.generated.resources.Res
 import bifollow.composeapp.generated.resources.calendar_desc
 import bifollow.composeapp.generated.resources.cancel
+import bifollow.composeapp.generated.resources.client
 import bifollow.composeapp.generated.resources.date_placeholder
 import bifollow.composeapp.generated.resources.ok
 import bifollow.composeapp.generated.resources.select_date
@@ -63,7 +66,7 @@ fun AddScreenPreview() {
 fun AddScreen() {
     val noveaJobs = TariffDataSource.noveaJobs
     val pionniersJobs = TariffDataSource.pionniersJobs
-    
+
     var expanded by remember { mutableStateOf(false) }
     var selectedJob by remember { mutableStateOf<JobItem?>(null) }
 
@@ -96,7 +99,10 @@ fun AddScreen() {
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                 colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                 modifier = Modifier
-                    .menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = true)
+                    .menuAnchor(
+                        type = ExposedDropdownMenuAnchorType.PrimaryNotEditable,
+                        enabled = true
+                    )
                     .fillMaxWidth()
             )
 
@@ -132,14 +138,22 @@ fun AddScreen() {
             }
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(24.dp))
 
+        OutlinedTextField(
+            state = rememberTextFieldState(),
+            label = { Text(stringResource(Res.string.client)) },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
         Button(
             onClick = { /* TODO Add the job to the selected date */ },
             modifier = Modifier.fillMaxWidth(),
             enabled = selectedJob != null
         ) {
-            val buttonText = if (selectedJob != null) "Ajouter (${selectedJob!!.price}€)" else "Ajouter"
+            val buttonText =
+                if (selectedJob != null) "Ajouter (${selectedJob!!.price}€)" else "Ajouter"
             Text(buttonText)
         }
     }
@@ -210,7 +224,10 @@ fun DatePickerFieldToModal(modifier: Modifier = Modifier) {
         label = { Text(stringResource(Res.string.select_date)) },
         placeholder = { Text(stringResource(Res.string.date_placeholder)) },
         trailingIcon = {
-            Icon(Icons.Default.DateRange, contentDescription = stringResource(Res.string.calendar_desc))
+            Icon(
+                Icons.Default.DateRange,
+                contentDescription = stringResource(Res.string.calendar_desc)
+            )
         },
         readOnly = true,
         modifier = modifier
