@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1042750117989",
+    "project_id": "bi-follow",
+    "storage_bucket": "bi-follow.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1042750117989:android:a0a9558f5414bb6d9bce8c",
+        "android_client_info": {
+          "package_name": "com.mgui.bifollow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMUJ9Tyw2X5QYiQqEJMCYkiFbnRvP77vo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
