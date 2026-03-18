@@ -53,8 +53,8 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.firebase.common)
             implementation(libs.firebase.analytics)
-            implementation(project.dependencies.platform(libs.firebase.bom))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -92,4 +92,3 @@ android {
 dependencies {
     debugImplementation(libs.compose.uiTooling)
 }
-
